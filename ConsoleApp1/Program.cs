@@ -1,40 +1,69 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Diagnostics;
+using System.Reflection;
 
 class ModelNumberDigest {
     public static void Main()
     {
-        String line;
+        ListGenerator();
+    }
+    public static void ListGenerator()
+    {
         try
         {
             //Pass the file path and file name to the StreamReader constructor
-            StreamReader sr = new StreamReader("C:\\Users\\Admin\\Downloads\\Filter - Master Unit List.htm");
-            StreamWriter swr = new StreamWriter("Amogus");
+            string folder = Path.GetDirectoryName(Environment.ProcessPath).Split()[0];
+            Console.WriteLine(folder);
+            StreamReader sr = new StreamReader(folder + "\\Filter - Master Unit List.htm");
+            StreamWriter swr = new StreamWriter(folder + "\\Amogus");
+
             string hrefPattern = @"href\s*=\s*(?:[""'](?<1>[^""']*)[""']|(?<1>[^>\s]+))";
-            string pattern2 = @"^[a-z]{3,3}\-";
+            string pattern2 = @"^[a-zA-Z]{3,3}\-.+[a-zA-Z0-9]";
             //Read the first line of text
-            line = sr.ReadLine();
+            String line = sr.ReadLine();
             //Continue to read until you reach end of file
             while (line != null)
             {
                 //write the line to console window
-                Console.WriteLine(line);
-                if(Regex.IsMatch(line, hrefPattern))
+                //Console.WriteLine(line);
+                if (Regex.IsMatch(line, hrefPattern))
                 {
-                    if (Regex.IsMatch(line, pattern2)) 
+                    //write the line to console window
+                    //Console.WriteLine(line);
+
+                    //Looking for data-name matches
+                    if (line.Contains("data-name="))
                     {
-                        Console.WriteLine(Regex.Count(line, pattern2));
+                        //Splits line into digestible array
+                        line = line.Split("data-name=")[1];
+                        Array subStrings = line.Split('"', ' ');
+                        //prints array
+                        foreach (string token in subStrings)
+                        {
+                            //Console.WriteLine(token);
+                            if (Regex.IsMatch(token, pattern2))
+                            {
+                                //debug to console
+                                //Console.WriteLine(token);
+                                //Write number of matching patterns
+                                swr.WriteLine(token);
+                            }
+                        }
                     }
+
+
 
                 }
                 //Read the next line
+                #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                 line = sr.ReadLine();
+                #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             }
             //close the file
             sr.Close();
             swr.Close();
-            Console.ReadLine();
         }
         catch (Exception e)
         {
@@ -43,12 +72,7 @@ class ModelNumberDigest {
         finally
         {
             Console.WriteLine("Executing finally block.");
+            Console.ReadLine();
         }
-      //  File.OpenRead("");
-      //string pattern = "(Mr\\.? |Mrs\\.? |Miss |Ms\\.? )";
-      //  string[] names = { "Mr. Henry Hunt", "Ms. Sara Samuels",
-      //                   "Abraham Adams", "Ms. Nicole Norris" };
-      //  foreach (string name in names)
-      //      Console.WriteLine(Regex.Replace(name, pattern, String.Empty));
     }
 }
