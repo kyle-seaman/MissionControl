@@ -1,27 +1,27 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using System.IO;
-using System.Diagnostics;
-using System.Reflection;
+﻿using System.Text.RegularExpressions;
 
-class ModelNumberDigest {
+class ConsoleApp1 {
     public static void Main()
     {
-        ListGenerator();
+        //Passes the filepath
+        string folder = Path.GetDirectoryName(Environment.ProcessPath).Split("ConsoleApp1")[0];
+        //Console.WriteLine(folder); //Confirm folder path
+        //If Amongus doesn't exist, create a new mogus
+        if (File.Exists(folder+"\\Amongus")!)
+        {
+            ListGenerator(folder);
+        }
     }
-    public static void ListGenerator()
+    public static void ListGenerator(string folder)
     {
         try
         {
-            //Pass the file path and file name to the StreamReader constructor
-            string folder = Path.GetDirectoryName(Environment.ProcessPath).Split("ConsoleApp1")[0];
-            //Console.WriteLine(folder); //Confirm folder path
 
             StreamReader sr = new StreamReader(folder + "\\Filter - Master Unit List.htm");
             StreamWriter swr = new StreamWriter(folder + "\\Amogus");
 
             string hrefPattern = @"href\s*=\s*(?:[""'](?<1>[^""']*)[""']|(?<1>[^>\s]+))";
-            string pattern2 = @"^[a-zA-Z]{3,3}\-.+[a-zA-Z0-9]";
+            string handlePattern = @"^[a-zA-Z]{3,3}\-.+[a-zA-Z0-9]";
             //Read the first line of text
             String line = sr.ReadLine();
             //Continue to read until you reach end of file
@@ -44,7 +44,7 @@ class ModelNumberDigest {
                         foreach (string token in subStrings)
                         {
                             //Console.WriteLine(token);
-                            if (Regex.IsMatch(token, pattern2))
+                            if (Regex.IsMatch(token, handlePattern))
                             {
                                 //debug to console
                                 Console.WriteLine(token);
