@@ -14,8 +14,9 @@ class ModelNumberDigest {
         try
         {
             //Pass the file path and file name to the StreamReader constructor
-            string folder = Path.GetDirectoryName(Environment.ProcessPath).Split()[0];
-            Console.WriteLine(folder);
+            string folder = Path.GetDirectoryName(Environment.ProcessPath).Split("ConsoleApp1")[0];
+            //Console.WriteLine(folder); //Confirm folder path
+
             StreamReader sr = new StreamReader(folder + "\\Filter - Master Unit List.htm");
             StreamWriter swr = new StreamWriter(folder + "\\Amogus");
 
@@ -46,7 +47,7 @@ class ModelNumberDigest {
                             if (Regex.IsMatch(token, pattern2))
                             {
                                 //debug to console
-                                //Console.WriteLine(token);
+                                Console.WriteLine(token);
                                 //Write number of matching patterns
                                 swr.WriteLine(token);
                             }
@@ -72,7 +73,7 @@ class ModelNumberDigest {
         finally
         {
             Console.WriteLine("Executing finally block.");
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }
